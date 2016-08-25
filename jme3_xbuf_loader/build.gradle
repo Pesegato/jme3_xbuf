@@ -1,7 +1,11 @@
-def DEV_MODE=false
 
 apply plugin: 'java'
 
+ext {
+	jvm = org.gradle.internal.jvm.Jvm.current()
+	javaVersion = JavaVersion.current()
+	isCiServer = System.getenv("TRAVIS")
+}
 
 configurations.all {
 	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
@@ -11,11 +15,11 @@ repositories{
 	maven{ url "http://dl.bintray.com/riccardo/v-hacd" }
 }
 
-def v_physicsloader="0.5"
-def g_physicsloader="com.github.riccardobl"
-if (DEV_MODE){
-	v_physicsloader="SNAPSHOT"
-	g_physicsloader="dev"
+def v_physicsloader="SNAPSHOT"
+def g_physicsloader="dev"
+if (isCiServer){
+	v_physicsloader="0.5"
+	g_physicsloader="com.github.riccardobl"
 }
 
 dependencies {
